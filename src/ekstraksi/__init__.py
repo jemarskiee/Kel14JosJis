@@ -12,6 +12,7 @@ from pathlib import Path
 from src.common.manifest import RAW
 from .reader_csv import baca_csv
 from .reader_json import baca_json
+from .reader_wdi import baca_semua_wdi
 
 
 def jalankan():
@@ -33,6 +34,9 @@ def jalankan():
 
         nama = path.relative_to(RAW).as_posix()
         hasil[nama] = baca_json(path)
+
+    # Membaca seluruh file WDI
+    hasil.update(baca_semua_wdi())
 
     # Menampilkan jumlah baris setiap file
     for nama, df in hasil.items():
