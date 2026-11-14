@@ -13,6 +13,7 @@ from src.common.manifest import RAW
 from .reader_csv import baca_csv
 from .reader_json import baca_json
 from .reader_wdi import baca_semua_wdi
+from .reader_ilo import baca_semua_ilo
 
 
 def jalankan():
@@ -37,6 +38,9 @@ def jalankan():
 
     # Membaca seluruh file WDI
     hasil.update(baca_semua_wdi())
+
+    # Membaca seluruh file ILOSTAT
+    hasil.update(baca_semua_ilo())
 
     # Menampilkan jumlah baris setiap file
     for nama, df in hasil.items():
