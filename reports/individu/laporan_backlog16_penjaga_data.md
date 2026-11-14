@@ -14,12 +14,11 @@ Isi tabel berikut berdasarkan konfirmasi dan bukti yang dikirim masing-masing an
 
 | No. | NIM | Nama | Pemeriksaan SHA-256 | `data_hash` | Keterangan |
 |---:|---|---|---|---|---|
-| 1 | 124450002 | Salsabila Nazwa Putri | Lolos* | `a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4` | Hash pembanding |
-| 2 | [NIM] | [Nama] | [Lolos/Belum] | [Tempel hash lengkap] | [Sesuai/Belum diperiksa] |
-| 3 | [NIM] | [Nama] | [Lolos/Belum] | [Tempel hash lengkap] | [Sesuai/Belum diperiksa] |
-| 4 | [NIM] | [Nama] | [Lolos/Belum] | [Tempel hash lengkap] | [Sesuai/Belum diperiksa] |
-
-\*Status SHA-256 pada baris penanggung jawab diisi berdasarkan hasil pemeriksaan yang benar-benar dijalankan.
+| 1 | 124450002 | Salsabila Nazwa Putri | Lolos | a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4 | Hash pembanding |
+| 2 | 124450034 | Suci Aulia | Lolos | a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4 | Sesuai |
+| 3 | 124450077 | Indah Khairunnisa | Lolos | a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4 | Sesuai |
+| 4 | 124450024 | Yollanda Agustina | Lolos | a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4 | Sesuai |
+| 5 | 124450111 | Jeremi Marolop Partogi Situmorang | Lolos | a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4 | Sesuai |
 
 ## 3. Pemeriksaan konsistensi `data_hash`
 
@@ -30,11 +29,12 @@ a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4
 ```
 
 Kriteria:
+
 - Nilai `data_hash` setiap anggota harus sama persis dengan hash pembanding.
 - Setiap anggota telah melaporkan pemeriksaan SHA-256 berhasil.
 - Anggota yang belum mengirim bukti atau hash belum dinyatakan tervalidasi.
 
-**Hasil akhir:** [Isi setelah seluruh anggota diperiksa: Semua sama / Masih terdapat perbedaan]
+**Hasil akhir:** Semua sama
 
 ## 4. Pemeriksaan `data/raw/` dan Git
 
@@ -46,11 +46,12 @@ git ls-files data/raw/
 ```
 
 Catat hasil pemeriksaan:
-- Perubahan pada `data/raw/`: [Tidak ada / Ada, jelaskan]
-- File `data/raw/` yang terlacak Git: [Tidak ada / Ada, jelaskan]
 
-Data pada `data/raw/` tidak boleh diubah secara manual maupun dimasukkan ke commit.
+- Perubahan pada `data/raw/`: Tidak ada
+- File `data/raw/` yang terlacak Git: Tidak ada
+
+Berdasarkan hasil pemeriksaan, tidak ditemukan perubahan pada file `data/raw/` yang terdeteksi Git dan tidak ada file dalam direktori tersebut yang terlacak oleh Git. Dengan demikian, ketentuan pengelolaan `data/raw/` telah terpenuhi.
 
 ## 5. Kesimpulan
 
-[Isi setelah seluruh bukti terkumpul. Nyatakan Backlog 16 selesai hanya jika seluruh anggota melaporkan SHA-256 lolos, semua `data_hash` sama, dan ketentuan `data/raw/` terpenuhi.]
+Backlog 16 – Penjaga Data telah diselesaikan. Seluruh 5 anggota kelompok telah melaporkan pemeriksaan SHA-256 dengan status lolos dan memiliki nilai `data_hash` yang sama. Pemeriksaan Git juga menunjukkan tidak ada perubahan yang terdeteksi pada `data/raw/` dan tidak ada file dalam direktori tersebut yang terlacak oleh Git.
