@@ -1,0 +1,6 @@
+sumber,seri_kode,rincian,wilayah,frekuensi,n_obs,tahun_awal,tahun_akhir,n_tahun,tahun_hilang,tahun_proyeksi,satuan_sumber,satuan_panduan,status_obs
+ILOSTAT,SDG_0821_NOC_RT,tanpa dimensi rincian,IDN,A,28,2000,2027,28,,2027,PT 0,laju pertumbuhan (konfirmasi dari metadata),
+ILOSTAT,SDG_0922_NOC_RT,tanpa dimensi rincian,IDN,A,24,2000,2023,24,,,PT 0,proporsi (konfirmasi dari metadata),B
+ILOSTAT,SDG_B821_NOC_RT,tanpa dimensi rincian,IDN,A,28,2000,2027,28,,2027,PT 0,laju pertumbuhan (konfirmasi dari metadata),
+WDI,NV.IND.MANF.ZS,tanpa dimensi rincian (hanya negara),IDN,A,43,1983,2025,43,,,,persen PDB (konfirmasi dari metadata),
+WDI,SL.GDP.PCAP.EM.KD,tanpa dimensi rincian (hanya negara),IDN,A,35,1991,2025,35,,,,"dolar PPP konstan, tingkat (panduan kelompok bagian 3)",
