@@ -1,11 +1,11 @@
-# Grid Lengkap dan Kelengkapan Panel (Tahap 3)
+﻿# Grid Lengkap dan Kelengkapan Panel (Tahap 3)
 
 Kelompok 14: Produktivitas tenaga kerja dan industri
 Sprint 1, Tahap 3 (grid dan kelengkapan panel)
 
 ## 1. Metode
 
-Grid provinsi x tahun dibentuk per seri (var1161, var1344, var1214, var2755) dari hasil ekstraksi tahap 1. Skrip: `src/profil/grid_tahap3.py`. Data mentah, hasil ekstraksi, dan Silver tidak diubah.
+Grid provinsi x tahun dibentuk per seri (var1161, var1344, var1214, var2755) dari hasil ekstraksi tahap 1. Skrip: `src/silver/grid_tahap3.py`. Data mentah, hasil ekstraksi, dan Silver tidak diubah.
 
 Aturan:
 1. Baris Indonesia (9999) dipisah dari baris provinsi: 46 baris nasional (`reports/profil/baris_nasional.csv`) dan 1.577 baris provinsi.

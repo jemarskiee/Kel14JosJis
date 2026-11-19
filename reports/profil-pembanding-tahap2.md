@@ -1,4 +1,4 @@
-# Profil Seri Pembanding Nasional (Tahap 2)
+﻿# Profil Seri Pembanding Nasional (Tahap 2)
 
 Kelompok 14: Produktivitas tenaga kerja dan industri
 Sprint 1, Tahap 2 (profil seri pembanding)
@@ -7,7 +7,7 @@ Sprint 1, Tahap 2 (profil seri pembanding)
 
 Laporan ini memprofilkan lima seri pembanding nasional: SDG_0821_NOC_RT, SDG_B821_NOC_RT, dan SDG_0922_NOC_RT dari ILOSTAT, serta SL.GDP.PCAP.EM.KD dan NV.IND.MANF.ZS dari WDI. Isinya adalah periode yang tersedia, rincian, satuan, dan tahun yang beririsan dengan seri utama. Hasilnya dipakai untuk memilih rincian yang sebanding pada tahap 6.
 
-Data dibaca dari hasil ekstraksi tahap 1 (`src/ekstraksi`). Skrip profil: `src/profil/pembanding_tahap2.py`. Tahap ini hanya menandai dan tidak mengubah data. Tahun setelah 2026 diperlakukan sebagai proyeksi dan dikeluarkan dari irisan, sesuai panduan kelompok (angka yang melewati tahun berjalan).
+Data dibaca dari hasil ekstraksi tahap 1 (`src/ekstraksi`). Skrip profil: `src/silver/pembanding_tahap2.py`. Tahap ini hanya menandai dan tidak mengubah data. Tahun setelah 2026 diperlakukan sebagai proyeksi dan dikeluarkan dari irisan, sesuai panduan kelompok (angka yang melewati tahun berjalan).
 
 Berkas keluaran:
 

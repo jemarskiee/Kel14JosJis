@@ -1,4 +1,4 @@
-"""Tahap 2: profil dan calon anomali var1161, var1344, var1214, var2755.
+﻿"""Tahap 2: profil dan calon anomali var1161, var1344, var1214, var2755.
 Tujuan: menemukan, bukan memperbaiki. Skrip hanya membaca hasil ekstraksi
 dan menulis tabel serta grafik di reports/. Data tidak diubah."""
 import re
