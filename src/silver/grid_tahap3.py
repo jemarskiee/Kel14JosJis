@@ -1,4 +1,4 @@
-"""Tahap 3: grid lengkap provinsi x periode, kelengkapan panel, pemisahan
+﻿"""Tahap 3: grid lengkap provinsi x periode, kelengkapan panel, pemisahan
 baris Indonesia, dan pemeriksaan laju provinsi vs nasional (var1161).
 Hanya membaca hasil ekstraksi. Tidak mengubah data mentah, ekstraksi, atau Silver."""
 from pathlib import Path
@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from src.ekstraksi import jalankan
-from src.profil.analisis_tahap2 import siapkan, terbaru, SERI
+from src.silver.analisis_tahap2 import siapkan, terbaru, SERI
 
 PROFIL = Path("reports/profil")
 GAMBAR = Path("reports/gambar")

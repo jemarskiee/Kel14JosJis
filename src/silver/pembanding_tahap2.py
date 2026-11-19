@@ -1,4 +1,4 @@
-"""Tahap 2 (pembanding): profil SDG_0821_NOC_RT, SDG_B821_NOC_RT, SDG_0922_NOC_RT,
+﻿"""Tahap 2 (pembanding): profil SDG_0821_NOC_RT, SDG_B821_NOC_RT, SDG_0922_NOC_RT,
 SL.GDP.PCAP.EM.KD, NV.IND.MANF.ZS. Hanya membaca hasil ekstraksi dan menulis
 tabel di reports/profil/. Data tidak diubah."""
 import re
@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 
 from src.ekstraksi import jalankan
-from src.profil.analisis_tahap2 import kumpulkan
+from src.silver.analisis_tahap2 import kumpulkan
 
 PROFIL = Path("reports/profil")
 PROFIL.mkdir(parents=True, exist_ok=True)
