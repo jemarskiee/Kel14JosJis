@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 # Profil dan Calon Anomali Seri Utama (Tahap 2)
+=======
+﻿# Profil dan Calon Anomali Seri Utama (Tahap 2)
+>>>>>>> 6c3a75eca90542af1ad4022572bda1878c0c0262
 
 Kelompok 14: Produktivitas tenaga kerja dan industri
 Sprint 1, Tahap 2 (Profil dan anomali)
 
 ## 1. Cakupan dan metode
 
+<<<<<<< HEAD
 Seri yang diprofilkan: var1161 (SDG 8.2.1), var1344 (SDG 2.3.1), var1214 (SDG 9.2.1), dan var2755 (SDG 9.2.2). Data dibaca dari hasil ekstraksi tahap 1 (`src/ekstraksi`, fungsi `jalankan()`). Skrip profil ada di `src/profil/analisis_tahap2.py`.
+=======
+Seri yang diprofilkan: var1161 (SDG 8.2.1), var1344 (SDG 2.3.1), var1214 (SDG 9.2.1), dan var2755 (SDG 9.2.2). Data dibaca dari hasil ekstraksi tahap 1 (`src/ekstraksi`, fungsi `jalankan()`). Skrip profil ada di `src/silver/analisis_tahap2.py`.
+>>>>>>> 6c3a75eca90542af1ad4022572bda1878c0c0262
 
 Ketentuan yang dipakai:
 - Tahap ini hanya menemukan dan menandai. Data mentah, hasil ekstraksi, dan Silver tidak diubah.
@@ -68,10 +76,17 @@ Semua grafik ada di `reports/gambar/`, tiga per seri:
 - `<seri>_total_deret_waktu.png`: deret waktu semua provinsi (abu-abu), median provinsi (biru), nilai Indonesia (merah), dan calon anomali (titik hitam).
 
 Berkas:
+<<<<<<< HEAD
 1. var1161_total_boxplot_periode.png, var1161_total_boxplot_provinsi.png, var1161_total_deret_waktu.png. Temuan: Berdasarkan ketiga visualisasi data var1161, terdapat pola fluktuasi konsisten antara median provinsi dan nilai Indonesia dengan puncak pada 2013, 2015, dan 2017, serta titik terendah pada 2019–2020. Secara spasial, disparitas antarwilayah cukup mencolok: Sulawesi Tengah, Papua Selatan, dan Maluku Utara memiliki median tertinggi (>4), sedangkan Papua Tengah, Nusa Tenggara Barat, dan Riau terendah (<0). Variasi tahunan juga bervariasi, dengan sebaran terlebar pada 2017 dan tersempit pada 2024. Perlu dicatat adanya anomali ekstrem pada 2025 (nilai >30) dan 2023 (nilai < -15), serta kategori "nan" yang mengindikasikan data tidak valid. Secara keseluruhan, data menunjukkan variabilitas tinggi baik antar waktu maupun antar wilayah, dan anomali pada periode terakhir memerlukan investigasi lebih lanjut.
 2. var1344_total_boxplot_periode.png, var1344_total_boxplot_provinsi.png, var1344_total_deret_waktu.png. Temuan: Berdasarkan ketiga visualisasi data var1344 (2015–2023), terlihat tren kenaikan yang konsisten pada median nasional (garis oranye) maupun nilai Indonesia (garis merah), dengan lonjakan tajam pada tahun 2023. Secara spasial, disparitas antarwilayah sangat mencolok: Kalimantan Timur, Riau, dan Kalimantan Utara mendominasi dengan median tertinggi (di atas 1,4 x 10^8), sementara Papua, Nusa Tenggara Timur, dan DI Yogyakarta berada di posisi terendah. Sebaran data antarprovinsi per periode juga semakin melebar dari tahun ke tahun, dengan banyaknya titik pencilan (outlier) ekstrem pada periode 2018–2023 yang mengindikasikan ketimpangan nilai yang semakin besar antarwilayah. 
 3. var1214_total_boxplot_periode.png, var1214_total_boxplot_provinsi.png, var1214_total_deret_waktu.png. Temuan: Berdasarkan ketiga visualisasi data var1214 (2010–2023), median nasional (garis oranye) dan nilai Indonesia (garis merah) menunjukkan tren yang sangat stabil dan relatif datar di kisaran angka 12–22 sepanjang periode. Secara spasial, disparitas antarwilayah sangat mencolok: Jawa Barat, Kepulauan Riau, dan Banten mendominasi dengan median tertinggi (di atas 30), sementara Papua Tengah, Papua Pegunungan, dan Nusa Tenggara Timur berada di posisi terendah. Terdapat beberapa provinsi dengan sebaran data yang sangat lebar, seperti Sulawesi Tengah dan Maluku Utara. Selain itu, terlihat banyak titik pencilan (outlier) ekstrem yang konsisten di angka 40-an pada hampir setiap tahun, serta satu provinsi yang mengalami lonjakan drastis pada tahun 2023 (mendekati 40), mengindikasikan adanya anomali data yang perlu diverifikasi.
 4. var2755_total_boxplot_periode.png, var2755_total_boxplot_provinsi.png, var2755_total_deret_waktu.png. Temuan: Berdasarkan ketiga visualisasi data var2755 (2018–2025), terlihat tren yang sangat stabil dan datar sepanjang periode, baik pada median nasional (garis oranye, kisaran 8–9) maupun nilai Indonesia (garis merah, kisaran 13–15), dengan sedikit penurunan pada tahun 2020. Secara spasial, disparitas antarwilayah sangat mencolok: Kepulauan Riau, Banten, dan Jawa Tengah mendominasi dengan median tertinggi (di atas 15), sementara Papua Pegunungan, Papua Tengah, dan Papua berada di posisi terendah (median <5). Provinsi Maluku Utara memiliki sebaran data yang sangat ekstrem dengan rentang antar-kuartil paling lebar (dari ~4 hingga ~24). Selain itu, terdapat kelompok provinsi dengan nilai konstan sangat tinggi (di kisaran 20–25) yang konsisten muncul sebagai pencilan (outlier) di setiap tahunnya, mengindikasikan adanya entitas dengan nilai yang jauh di atas rata-rata nasional.
+=======
+1. var1161_total_boxplot_periode.png, var1161_total_boxplot_provinsi.png, var1161_total_deret_waktu.png. Temuan: Berdasarkan ketiga visualisasi data var1161, terdapat pola fluktuasi konsisten antara median provinsi dan nilai Indonesia dengan puncak pada 2013, 2015, dan 2017, serta titik terendah pada 2019â€“2020. Secara spasial, disparitas antarwilayah cukup mencolok: Sulawesi Tengah, Papua Selatan, dan Maluku Utara memiliki median tertinggi (>4), sedangkan Papua Tengah, Nusa Tenggara Barat, dan Riau terendah (<0). Variasi tahunan juga bervariasi, dengan sebaran terlebar pada 2017 dan tersempit pada 2024. Perlu dicatat adanya anomali ekstrem pada 2025 (nilai >30) dan 2023 (nilai < -15), serta kategori "nan" yang mengindikasikan data tidak valid. Secara keseluruhan, data menunjukkan variabilitas tinggi baik antar waktu maupun antar wilayah, dan anomali pada periode terakhir memerlukan investigasi lebih lanjut.
+2. var1344_total_boxplot_periode.png, var1344_total_boxplot_provinsi.png, var1344_total_deret_waktu.png. Temuan: Berdasarkan ketiga visualisasi data var1344 (2015â€“2023), terlihat tren kenaikan yang konsisten pada median nasional (garis oranye) maupun nilai Indonesia (garis merah), dengan lonjakan tajam pada tahun 2023. Secara spasial, disparitas antarwilayah sangat mencolok: Kalimantan Timur, Riau, dan Kalimantan Utara mendominasi dengan median tertinggi (di atas 1,4 x 10^8), sementara Papua, Nusa Tenggara Timur, dan DI Yogyakarta berada di posisi terendah. Sebaran data antarprovinsi per periode juga semakin melebar dari tahun ke tahun, dengan banyaknya titik pencilan (outlier) ekstrem pada periode 2018â€“2023 yang mengindikasikan ketimpangan nilai yang semakin besar antarwilayah. 
+3. var1214_total_boxplot_periode.png, var1214_total_boxplot_provinsi.png, var1214_total_deret_waktu.png. Temuan: Berdasarkan ketiga visualisasi data var1214 (2010â€“2023), median nasional (garis oranye) dan nilai Indonesia (garis merah) menunjukkan tren yang sangat stabil dan relatif datar di kisaran angka 12â€“22 sepanjang periode. Secara spasial, disparitas antarwilayah sangat mencolok: Jawa Barat, Kepulauan Riau, dan Banten mendominasi dengan median tertinggi (di atas 30), sementara Papua Tengah, Papua Pegunungan, dan Nusa Tenggara Timur berada di posisi terendah. Terdapat beberapa provinsi dengan sebaran data yang sangat lebar, seperti Sulawesi Tengah dan Maluku Utara. Selain itu, terlihat banyak titik pencilan (outlier) ekstrem yang konsisten di angka 40-an pada hampir setiap tahun, serta satu provinsi yang mengalami lonjakan drastis pada tahun 2023 (mendekati 40), mengindikasikan adanya anomali data yang perlu diverifikasi.
+4. var2755_total_boxplot_periode.png, var2755_total_boxplot_provinsi.png, var2755_total_deret_waktu.png. Temuan: Berdasarkan ketiga visualisasi data var2755 (2018â€“2025), terlihat tren yang sangat stabil dan datar sepanjang periode, baik pada median nasional (garis oranye, kisaran 8â€“9) maupun nilai Indonesia (garis merah, kisaran 13â€“15), dengan sedikit penurunan pada tahun 2020. Secara spasial, disparitas antarwilayah sangat mencolok: Kepulauan Riau, Banten, dan Jawa Tengah mendominasi dengan median tertinggi (di atas 15), sementara Papua Pegunungan, Papua Tengah, dan Papua berada di posisi terendah (median <5). Provinsi Maluku Utara memiliki sebaran data yang sangat ekstrem dengan rentang antar-kuartil paling lebar (dari ~4 hingga ~24). Selain itu, terdapat kelompok provinsi dengan nilai konstan sangat tinggi (di kisaran 20â€“25) yang konsisten muncul sebagai pencilan (outlier) di setiap tahunnya, mengindikasikan adanya entitas dengan nilai yang jauh di atas rata-rata nasional.
+>>>>>>> 6c3a75eca90542af1ad4022572bda1878c0c0262
 
 ## 4. Calon anomali
 
@@ -140,7 +155,11 @@ Penafsiran: semua baris di atas masih calon outlier asli. Tidak ada yang dikorek
 
 ## 6. Berkas keluaran
 
+<<<<<<< HEAD
 - `src/profil/analisis_tahap2.py`
+=======
+- `src/silver/analisis_tahap2.py`
+>>>>>>> 6c3a75eca90542af1ad4022572bda1878c0c0262
 - `reports/profil/profil_per_seri.csv`
 - `reports/profil/profil_per_provinsi.csv`
 - `reports/profil/provinsi_per_periode.csv`
@@ -154,4 +173,8 @@ Penafsiran: semua baris di atas masih calon outlier asli. Tidak ada yang dikorek
 
 - Ambang (IQR 1,5, z-score 2,5, IQR 3 untuk lonjakan, robust z 3,5) dipilih sebagai titik awal dan bisa diubah. Jumlah calon anomali bergantung pada ambang ini.
 - IQR lintas provinsi menandai banyak titik karena sebaran antarprovinsi memang lebar, terutama pada var1161. Daftarnya adalah calon, bukan kesimpulan.
+<<<<<<< HEAD
 - Profil memakai snapshot terbaru bila kunci kembar. Ini bukan aturan Silver.
+=======
+- Profil memakai snapshot terbaru bila kunci kembar. Ini bukan aturan Silver.
+>>>>>>> 6c3a75eca90542af1ad4022572bda1878c0c0262

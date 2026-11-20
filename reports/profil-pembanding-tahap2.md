@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Profil Seri Pembanding Nasional (Tahap 2)
+=======
+﻿# Profil Seri Pembanding Nasional (Tahap 2)
+>>>>>>> 6c3a75eca90542af1ad4022572bda1878c0c0262
 
 Kelompok 14: Produktivitas tenaga kerja dan industri
 Sprint 1, Tahap 2 (profil seri pembanding)
@@ -7,7 +11,11 @@ Sprint 1, Tahap 2 (profil seri pembanding)
 
 Laporan ini memprofilkan lima seri pembanding nasional: SDG_0821_NOC_RT, SDG_B821_NOC_RT, dan SDG_0922_NOC_RT dari ILOSTAT, serta SL.GDP.PCAP.EM.KD dan NV.IND.MANF.ZS dari WDI. Isinya adalah periode yang tersedia, rincian, satuan, dan tahun yang beririsan dengan seri utama. Hasilnya dipakai untuk memilih rincian yang sebanding pada tahap 6.
 
+<<<<<<< HEAD
 Data dibaca dari hasil ekstraksi tahap 1 (`src/ekstraksi`). Skrip profil: `src/profil/pembanding_tahap2.py`. Tahap ini hanya menandai dan tidak mengubah data. Tahun setelah 2026 diperlakukan sebagai proyeksi dan dikeluarkan dari irisan, sesuai panduan kelompok (angka yang melewati tahun berjalan).
+=======
+Data dibaca dari hasil ekstraksi tahap 1 (`src/ekstraksi`). Skrip profil: `src/silver/pembanding_tahap2.py`. Tahap ini hanya menandai dan tidak mengubah data. Tahun setelah 2026 diperlakukan sebagai proyeksi dan dikeluarkan dari irisan, sesuai panduan kelompok (angka yang melewati tahun berjalan).
+>>>>>>> 6c3a75eca90542af1ad4022572bda1878c0c0262
 
 Berkas keluaran:
 
@@ -95,4 +103,8 @@ Penanda "ya" hanya berlaku untuk empat kriteria: rincian (tanpa dimensi atau ber
 2. Batas proyeksi (setelah 2026) mengikuti panduan kelompok, yaitu angka yang melewati tahun berjalan.
 3. Dasar harga NV.IND.MANF.ZS dan var1214 belum terjelaskan.
 4. Kecocokan basis PDB ILO dengan BPS belum diuji secara numerik. Pengujian dilakukan di tahap 6.
+<<<<<<< HEAD
 5. Patahan seri ILO pada 2021 dalam irisan SDG_0922 dengan var2755 belum diuji pengaruhnya terhadap selisih. Pengujian dilakukan di tahap 6.
+=======
+5. Patahan seri ILO pada 2021 dalam irisan SDG_0922 dengan var2755 belum diuji pengaruhnya terhadap selisih. Pengujian dilakukan di tahap 6.
+>>>>>>> 6c3a75eca90542af1ad4022572bda1878c0c0262
