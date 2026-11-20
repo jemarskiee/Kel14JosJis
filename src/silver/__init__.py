@@ -174,8 +174,8 @@ def jalankan(mentah):
     catat_log(logs, "Simpan Parquet", len(df_silver), f"Data disimpan ke {out_path}")
 
     # 7. Simpan Log Keputusan
-    log_path = Path("log-keputusan.csv")
-    pd.DataFrame(logs).to_csv(log_path, index=False)
-    print(f"Log keputusan disimpan di {log_path}")
+    #log_path = Path("log-keputusan.csv")
+    #pd.DataFrame(logs).to_csv(log_path, index=False)
+    #print(f"Log keputusan disimpan di {log_path}")
 
     return df_silver
