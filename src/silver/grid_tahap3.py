@@ -26,6 +26,13 @@ BERDIRI = {
     "PAPUA BARAT DAYA": 2022,
 }
 
+# REVISI: Tambahan untuk klasifikasi sel belum terbit (data belum dirilis BPS)
+BUKTI_1161 = ("var.note BPS: laju provinsi baru (DOB) baru tersedia 2025; "
+              "2024 dihitung pada provinsi induk")
+BELUM_TERBIT = {("var1161", n, t): BUKTI_1161
+                for n in ("PAPUA BARAT DAYA", "PAPUA SELATAN", "PAPUA TENGAH", "PAPUA PEGUNUNGAN")
+                for t in (2022, 2023, 2024)}
+
 
 def sebab_kosong(t, f, l):
     if f is None:
@@ -40,12 +47,14 @@ def sebab_kosong(t, f, l):
 def peta_sel(g, s):
     w = g.pivot(index="nama", columns="tahun", values="kode_status").sort_index()
     fig, ax = plt.subplots(figsize=(9, 10))
-    ax.imshow(w.values, aspect="auto", cmap="RdYlGn", vmin=0, vmax=2)
+    # REVISI: vmax diubah jadi 3 karena ada status baru (belum_terbit = 3)
+    ax.imshow(w.values, aspect="auto", cmap="RdYlGn", vmin=0, vmax=3)
     ax.set_xticks(range(len(w.columns)))
     ax.set_xticklabels(w.columns, rotation=60, fontsize=7)
     ax.set_yticks(range(len(w.index)))
     ax.set_yticklabels(w.index, fontsize=6)
-    ax.set_title(f"{s}: hijau terisi, kuning belum berdiri, merah kosong", fontsize=9)
+    # REVISI: Judul keterangan warna disesuaikan
+    ax.set_title(f"{s}: hijau terisi, oranye belum terbit, kuning belum berdiri, merah kosong", fontsize=9)
     fig.tight_layout()
     fig.savefig(GAMBAR / f"grid_{s}.png", dpi=130)
     plt.close(fig)
@@ -103,9 +112,13 @@ def main():
             for t in tahun:
                 v = nilai.get((w, t), np.nan)
                 if pd.notna(v):
-                    st, sb, ks = "terisi", "", 2
+                    st, sb, ks = "terisi", "", 3
                 elif lahir and t < lahir:
                     st, sb, ks = "belum_berdiri", "", 1
+                elif (s, str(nama[w]).upper().strip(), t) in BELUM_TERBIT:
+                    # REVISI: Tambahan kondisi untuk menangkap status belum terbit
+                    st, ks = "belum_terbit", 2
+                    sb = BELUM_TERBIT[(s, str(nama[w]).upper().strip(), t)]
                 else:
                     st, sb, ks = "kosong", sebab_kosong(t, f, l), 0
                 baris.append(dict(seri_kode=s, wilayah_kode=w, nama=nama[w], tahun=t,
@@ -113,8 +126,9 @@ def main():
     g = pd.DataFrame(baris)
     g.drop(columns="kode_status").to_csv(PROFIL / "grid_panel.csv", index=False)
 
-    # 4. kelengkapan per tahun dan per seri (belum_berdiri tidak dihitung missing)
-    ada = g[g["status"] != "belum_berdiri"]
+    # 4. kelengkapan per tahun dan per seri (belum_berdiri & belum_terbit tidak dihitung missing)
+    # REVISI: buang status belum_terbit juga dari sel yang diharapkan
+    ada = g[~g["status"].isin(["belum_berdiri", "belum_terbit"])]
     kt = (ada.groupby(["seri_kode", "tahun"])
           .agg(sel_diharapkan=("status", "size"),
                sel_terisi=("status", lambda x: int((x == "terisi").sum()))).reset_index())
@@ -125,15 +139,20 @@ def main():
           .agg(tahun_awal=("tahun", "min"), tahun_akhir=("tahun", "max"),
                sel_grid=("status", "size"),
                belum_berdiri=("status", lambda x: int((x == "belum_berdiri").sum())),
+               belum_terbit=("status", lambda x: int((x == "belum_terbit").sum())),
                terisi=("status", lambda x: int((x == "terisi").sum())),
                kosong=("status", lambda x: int((x == "kosong").sum()))).reset_index())
-    ks["sel_diharapkan"] = ks["sel_grid"] - ks["belum_berdiri"]
+    
+    # REVISI: Masukkan belum_terbit ke dalam pengurangan sel_diharapkan
+    ks["sel_diharapkan"] = ks["sel_grid"] - ks["belum_berdiri"] - ks["belum_terbit"]
     ks["persen_terisi"] = (100 * ks["terisi"] / ks["sel_diharapkan"]).round(1)
+    
     sb = g[g["status"] == "kosong"].pivot_table(index="seri_kode", columns="sebab",
                                                 values="tahun", aggfunc="count", fill_value=0)
     ks = ks.merge(sb.reset_index(), on="seri_kode", how="left").fillna(0)
     ks.to_csv(PROFIL / "kelengkapan_per_seri.csv", index=False)
 
+    # Hanya detail untuk sel yang benar-benar missing (kosong)
     kd = (g[g["status"] == "kosong"].groupby(["seri_kode", "wilayah_kode", "nama", "sebab"])
           .agg(n_sel=("tahun", "size"),
                tahun=("tahun", lambda x: " ".join(map(str, sorted(x))))).reset_index())
@@ -167,7 +186,12 @@ def main():
         print("tahun arah berlawanan:", ok.index[~ok["arah_sama"]].tolist())
     else:
         print("tidak ada baris nasional var1161")
-    print("\nsel_kosong_grid total:", int((g["status"] == "kosong").sum()))
+        
+    # REVISI: Output terminal dipisah menjadi 4 baris
+    print("\nsel_missing (kosong):", int((g["status"] == "kosong").sum()))
+    print("sel_belum_terbit:", int((g["status"] == "belum_terbit").sum()))
+    print("sel_belum_berdiri:", int((g["status"] == "belum_berdiri").sum()))
+    print("sel_kosong_grid (missing + belum_terbit):", int(g["status"].isin(["kosong", "belum_terbit"]).sum()))
     print("selesai. Lihat reports/profil/ dan reports/gambar/grid_*.png")
 
 
