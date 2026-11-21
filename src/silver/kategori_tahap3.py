@@ -19,32 +19,39 @@ SEMENTARA = {
     "var1344": {"2022": "angka sementara", "2023": "angka sangat sementara"},
     "var1214": {"2022": "angka sementara", "2023": "angka sangat sementara"},
 }
+
 # Rentang mustahil (bukan rentang wajar): di luar ini dianggap bukti galat.
 MUSTAHIL = {"var1161": (-100, 100), "var1214": (0, 100),
             "var2755": (0, 100), "var1344": (0, None)}
+            
 PROV_BARU = {"6500", "9200", "9500", "9600", "9700"}
 
 
 def dedup(d):
+    """Membedakan salinan snapshot, revisi antar-snapshot, dan konflik nilai."""
     x = d.dropna(subset=["nilai_num"]).copy()
     x["format"] = np.where(x["berkas"].str.contains(".json", regex=False), "json", "csv")
     ps = (x.groupby(KUNCI + ["snapshot"])["nilai_num"].agg(["min", "max"]).reset_index())
     ps["beda_format"] = (ps["max"] - ps["min"]) > EPS
+    
     k = (ps.groupby(KUNCI).agg(n_snapshot=("snapshot", "nunique"),
                                konflik_format=("beda_format", "max"),
                                lo=("min", "min"), hi=("max", "max")).reset_index())
     k["revisi"] = ((k["hi"] - k["lo"]) > EPS) & (k["n_snapshot"] > 1) & ~k["konflik_format"]
     n = x.groupby(KUNCI).size().rename("n_salinan").reset_index()
     k = k.merge(n, on=KUNCI)
+    
     k["status"] = np.select(
         [k["konflik_format"], k["revisi"], k["n_salinan"] > 1],
         ["konflik_dalam_snapshot", "revisi_antar_snapshot", "sama_bukan_duplikat_salah"],
         default="tunggal")
+        
     ring = k.groupby(["seri_kode", "status"]).size().rename("n_kunci").reset_index()
     return k, ring
 
 
 def patahan(prov):
+    """Mendeteksi patahan seri (lonjakan serentak di hampir semua provinsi)."""
     out = []
     for (s, r), g in prov.groupby(["seri_kode", "rincian"]):
         g = g.sort_values(["wilayah_kode", "periode"]).copy()
@@ -72,13 +79,17 @@ def patahan(prov):
 
 
 def kategori(an, p, konflik, awal):
+    """Membedakan outlier asli, patahan seri, dan galat input."""
     pat = set(zip(p.loc[p["calon_patahan"], "seri_kode"], p.loc[p["calon_patahan"], "periode"]))
     kon = set(zip(konflik["seri_kode"], konflik["wilayah_kode"], konflik["periode"]))
     n_tanda = an.groupby(["seri_kode", "wilayah_kode"])["periode"].nunique()
     rows = []
+    
     for _, b in an.iterrows():
         s, t, w, v = b["seri_kode"], str(b["periode"]), str(b["wilayah_kode"]), b["nilai"]
         galat = []
+        
+        # Cek galat input
         if (s, w, t) in kon:
             galat.append("nilai CSV dan JSON berbeda pada snapshot yang sama")
         lo, hi = MUSTAHIL.get(s, (None, None))
@@ -86,6 +97,8 @@ def kategori(an, p, konflik, awal):
             galat.append(f"nilai di bawah batas mustahil {lo}")
         if hi is not None and v > hi:
             galat.append(f"nilai di atas batas mustahil {hi}")
+            
+        # Tentukan kategori
         if galat:
             kat, tindakan, bukti = "galat_input", "perlu_perbaikan_lewat_kode_dan_log", galat
         elif (s, t) in pat:
@@ -94,6 +107,8 @@ def kategori(an, p, konflik, awal):
         else:
             kat, tindakan = "outlier_asli", "ditandai_tidak_diubah"
             bukti = ["tidak ada bukti galat dan tidak serentak antarprovinsi"]
+            
+        # Tambahan penjelasan/bukti
         n = int(n_tanda.get((s, w), 0))
         if n >= 3:
             bukti.append(f"provinsi ini ditandai pada {n} periode (pola struktural)")
@@ -101,24 +116,29 @@ def kategori(an, p, konflik, awal):
             bukti.append(f"{SEMENTARA[s][t]} menurut catatan BPS, kemungkinan direvisi")
         if w in PROV_BARU and awal.get((s, w)) == t:
             bukti.append("tahun pertama data provinsi baru di seri ini")
+            
         rows.append(dict(b, kategori=kat, bukti="; ".join(bukti), tindakan=tindakan))
     return pd.DataFrame(rows)
 
 
 def main():
+    print("Memuat data ekstraksi...")
     hasil = jalankan()
     d = siapkan(hasil)
     d["periode"] = d["periode"].astype(str)
 
+    # --- BAGIAN 1: DEDUPLIKASI ---
     k, ring = dedup(d)
     k.drop(columns=["lo", "hi"]).to_csv(PROFIL / "dedup_kunci.csv", index=False)
     ring.to_csv(PROFIL / "dedup_ringkasan.csv", index=False)
     konflik = k[k["status"] == "konflik_dalam_snapshot"]
+    
     print("\n=== DEDUPLIKASI (jumlah kunci per status) ===")
     print(ring.to_string())
     print("konflik dalam snapshot yang sama (calon galat):", len(konflik))
     print("revisi antar snapshot:", int((k["status"] == "revisi_antar_snapshot").sum()))
 
+    # --- BAGIAN 2: PATAHAN SERI ---
     prov = d[(~d["nasional"]) & d["nilai_num"].notna()].copy()
     prov = prov.sort_values("snapshot", kind="stable").drop_duplicates(KUNCI, keep="last")
     awal = prov.groupby(["seri_kode", "wilayah_kode"])["periode"].min().to_dict()
@@ -126,6 +146,7 @@ def main():
     p = patahan(prov)
     p.to_csv(PROFIL / "patahan_serentak.csv", index=False)
     lolos = p[p["calon_patahan"]] if len(p) else p
+    
     print("\n=== TAHUN YANG LOLOS ATURAN PATAHAN ===")
     print(lolos.to_string() if len(lolos) else "tidak ada")
     print("\n=== 5 PERIODE PALING SERENTAK PER SERI (robust z mutlak terbesar) ===")
@@ -133,21 +154,25 @@ def main():
         print(s)
         print(g.reindex(g["robust_z"].abs().sort_values(ascending=False).index).head(5).to_string())
 
+    # --- BAGIAN 3: KATEGORI ANOMALI ---
     an = pd.read_csv(PROFIL / "calon_anomali.csv", dtype={"wilayah_kode": str, "periode": str})
     an = an[an["metode"] != "calon patahan seri"]
     kat = kategori(an, p, konflik, awal)
     kat.to_csv(PROFIL / "anomali_berkategori.csv", index=False)
+    
     print("\n=== KATEGORI ANOMALI ===")
     print(kat.groupby(["seri_kode", "kategori"]).size().to_string())
     print("total:", len(kat))
     print(kat["kategori"].value_counts().to_string())
 
+    # --- BAGIAN 4: PROYEKSI ILO ---
     rows, _ = baca_ilo(hasil)
     pr = [dict(seri_kode=r["seri_kode"], tahun=th, status="proyeksi",
                tindakan="dikeluarkan_dari_rekonsiliasi")
           for r in rows for th in sorted(r["_tahun"]) if th > TAHUN_BERJALAN]
     pd.DataFrame(pr, columns=["seri_kode", "tahun", "status", "tindakan"]).to_csv(
         PROFIL / "proyeksi_ilo.csv", index=False)
+        
     print("\n=== PROYEKSI ILO (setelah tahun", TAHUN_BERJALAN, ") ===")
     print(pd.DataFrame(pr).to_string() if pr else "tidak ada")
     print("\nselesai. Lihat reports/profil/")
