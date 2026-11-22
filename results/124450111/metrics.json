@@ -1,7 +1,8 @@
 {
   "metrik": {
     "aturan_validasi": 12,
-    "aturan_lolos": 10
+    "aturan_lolos": 10,
+    "kolom_terdokumentasi": 11
   },
   "seed": 0,
   "data_hash": "a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4",
