@@ -21,7 +21,7 @@ KUNCI = ["sumber", "seri_kode", "wilayah_kode", "periode", "rincian", "_berkas_r
 
 # 38 provinsi susunan 2025: kode BPS dua digit x 100, plus 9999 = Indonesia
 KODE_BPS = [11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 31, 32, 33, 34, 35, 36, 51, 52, 53,
-            61, 62, 63, 64, 65, 71, 72, 73, 74, 75, 76, 81, 82, 91, 92, 93, 94, 95, 96]
+            61, 62, 63, 64, 65, 71, 72, 73, 74, 75, 76, 81, 82, 91, 92, 94, 95, 96, 97]
 WILAYAH_VALID = {9999} | {k * 100 for k in KODE_BPS}
 
 PERIODE_RE = r"^\d{4}(-S[12]|-Q[1-4]|-(0[1-9]|1[0-2]))?$"
