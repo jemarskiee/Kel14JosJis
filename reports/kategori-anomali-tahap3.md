@@ -149,7 +149,7 @@ Pada dataset pembanding internasional dari ILOSTAT, teridentifikasi entri yang m
 
 ### Keterkaitan Log Keputusan dan Kategori Anomali
 Untuk menjaga transparansi, alur keputusan ini dirujuk secara eksplisit:
-1. **Deduplikasi:** Kunci yang sama persis di dua snapshot diberi status `sama_bukan_duplikat_salah`, sedangkan angka yang berbeda (delta > 1e-9) diberi status `revisi_antar_snapshot` (Rujukan Log: **K-029**). 
-2. **Konflik Nilai:** Konflik antar format (CSV vs JSON di hari yang sama) dicek secara otomatis. Jika ada, baris tersebut akan masuk sebagai `galat_input`. Karena hasil pengecekan adalah 0, maka 0 baris yang terdampak konflik (Rujukan Log: **K-030**).
-3. **Patahan Seri:** Pengecekan lonjakan serentak antarprovinsi menunjukkan 0 tahun yang memenuhi kriteria. Oleh karena itu, tidak ada anomali yang dikategorikan sebagai patahan seri (Rujukan Log: **K-031**).
-4. **Kategori Anomali:** Karena bersih dari konflik dan patahan, seluruh 149 anomali divalidasi sebagai karakteristik asli data (outlier asli) dan hanya ditandai tanpa diubah nilainya (Rujukan Log: **K-028**). Data per baris dapat dilihat pada `reports/profil/anomali_berkategori.csv`.
+1. **Deduplikasi:** Kunci yang sama persis di dua snapshot diberi status `sama_bukan_duplikat_salah`, sedangkan angka yang berbeda (delta > 1e-9) diberi status `revisi_antar_snapshot` (Rujukan Log: **K-031**). 
+2. **Konflik Nilai:** Konflik antar format (CSV vs JSON di hari yang sama) dicek secara otomatis. Jika ada, baris tersebut akan masuk sebagai `galat_input`. Karena hasil pengecekan adalah 0, maka 0 baris yang terdampak konflik (Rujukan Log: **K-032**).
+3. **Patahan Seri:** Pengecekan lonjakan serentak antarprovinsi menunjukkan 0 tahun yang memenuhi kriteria. Oleh karena itu, tidak ada anomali yang dikategorikan sebagai patahan seri (Rujukan Log: **K-033**).
+4. **Kategori Anomali:** Karena bersih dari konflik dan patahan, seluruh 149 anomali divalidasi sebagai karakteristik asli data (outlier asli) dan hanya ditandai tanpa diubah nilainya (Rujukan Log: **K-030**). Data per baris dapat dilihat pada `reports/profil/anomali_berkategori.csv`.
