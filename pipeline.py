@@ -6,6 +6,7 @@
 Urutan tahap tidak diubah; isi tiap tahap di src/<tahap>/. Tahap 7 (skala, arsip WDI) ditulis
 sebagai skrip terpisah di src/skala/ karena memakai unduhan tambahan.
 """
+"""Satu perintah reproduksi tim: data mentah -> Silver -> Gold -> validasi."""
 import sys
 import time
 
@@ -19,10 +20,10 @@ def main():
         sys.exit(f"data/raw tidak cocok dengan MANIFEST.csv ({len(salah)} berkas). Jalankan ulang unduh_data.py.")
     print(f"data/raw: {n} berkas cocok dengan MANIFEST.csv")
     for nama, langkah in [
-    ("ekstraksi", lambda h: ekstraksi.jalankan()),
-    ("silver", lambda h: silver.jalankan(h["ekstraksi"])),
-    # ("gold", lambda h: gold.jalankan(h["silver"])),
-     ("validasi", lambda h: validasi.jalankan(h["silver"], h.get("gold"))),
+        ("ekstraksi", lambda h: ekstraksi.jalankan()),
+        ("silver", lambda h: silver.jalankan(h["ekstraksi"])),
+        ("gold", lambda h: gold.jalankan(h["silver"])),  # Tanda # sudah dihapus
+        ("validasi", lambda h: validasi.jalankan(h["silver"], h.get("gold")))
     ]:
         mulai = time.time()
         hasil[nama] = langkah(hasil)
