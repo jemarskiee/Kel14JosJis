@@ -18,10 +18,12 @@ def main():
     if salah:
         sys.exit(f"data/raw tidak cocok dengan MANIFEST.csv ({len(salah)} berkas). Jalankan ulang unduh_data.py.")
     print(f"data/raw: {n} berkas cocok dengan MANIFEST.csv")
-    for nama, langkah in [("ekstraksi", lambda h: ekstraksi.jalankan()),
-                          ("silver", lambda h: silver.jalankan(h["ekstraksi"])),
-                          ("gold", lambda h: gold.jalankan(h["silver"])),
-                          ("validasi", lambda h: validasi.jalankan(h["silver"], h["gold"]))]:
+    for nama, langkah in [
+    ("ekstraksi", lambda h: ekstraksi.jalankan()),
+    ("silver", lambda h: silver.jalankan(h["ekstraksi"])),
+    # ("gold", lambda h: gold.jalankan(h["silver"])),
+    # ("validasi", lambda h: validasi.jalankan(h["silver"], h["gold"])),
+    ]:
         mulai = time.time()
         hasil[nama] = langkah(hasil)
         print(f"{nama:<10} selesai dalam {time.time() - mulai:.1f} s")

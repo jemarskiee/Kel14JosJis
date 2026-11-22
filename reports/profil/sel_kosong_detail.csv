@@ -1,0 +1,14 @@
+seri_kode,wilayah_kode,nama,sebab,n_sel,tahun
+var1161,6500,KALIMANTAN UTARA,sebelum_data_pertama,4,2012 2013 2014 2015
+var1214,9200,PAPUA BARAT DAYA,sebelum_data_pertama,1,2022
+var1214,9500,PAPUA SELATAN,sebelum_data_pertama,1,2022
+var1214,9600,PAPUA TENGAH,sebelum_data_pertama,1,2022
+var1214,9700,PAPUA PEGUNUNGAN,sebelum_data_pertama,1,2022
+var1344,9200,PAPUA BARAT DAYA,provinsi_tidak_ada_di_seri,2,2022 2023
+var1344,9500,PAPUA SELATAN,provinsi_tidak_ada_di_seri,2,2022 2023
+var1344,9600,PAPUA TENGAH,provinsi_tidak_ada_di_seri,2,2022 2023
+var1344,9700,PAPUA PEGUNUNGAN,provinsi_tidak_ada_di_seri,2,2022 2023
+var2755,9200,PAPUA BARAT DAYA,sebelum_data_pertama,2,2022 2023
+var2755,9500,PAPUA SELATAN,sebelum_data_pertama,2,2022 2023
+var2755,9600,PAPUA TENGAH,sebelum_data_pertama,2,2022 2023
+var2755,9700,PAPUA PEGUNUNGAN,sebelum_data_pertama,2,2022 2023
