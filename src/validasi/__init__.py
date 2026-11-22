@@ -5,6 +5,6 @@ kelengkapan wilayah, keunikan kunci, konsistensi provinsi vs nasional bila relev
 validasi ditulis ke reports/validasi.md. Data dictionary di docs/data-dictionary.md.
 """
 
+from .aturan_silver import jalankan
 
-def jalankan(silver, gold):
-    raise NotImplementedError("Tahap 8: skema pandera/GE untuk Silver dan Gold")
+__all__ = ["jalankan"]
