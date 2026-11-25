@@ -1,3 +1,4 @@
+
 """Tahap 4–6 — Reshape, integrasi, dan penyimpanan ke Gold (pertemuan VII, IX, XI, XII). Milik tim.
 
 Keluaran: data/gold/*.parquet (panel provinsi x tahun x indikator siap analisis, plus tabel
@@ -9,7 +10,7 @@ from src.gold import panel  # <--- Import file panel.py
 def jalankan(silver):
     """
     Fungsi utama untuk menjalankan seluruh proses Gold Layer.
-    Ini akan dipanggil oleh pipeline.py
+    Ini akan dipanggil oleh pipeline.py.
     """
     print("=== MEMULAI PROSES GOLD (TAHAP 4, 5, & 6) ===")
 
@@ -40,8 +41,8 @@ def jalankan(silver):
     
     # --- TAHAP 6: BUAT TABEL NASIONAL ---
     print("-> Membuat Tabel Nasional (Tahap 6)...")
+
     try:
-        # PENTING: Import juga dilakukan di dalam fungsi
         from . import nasional
         nasional.jalankan(df_gold)
     except Exception as e:
