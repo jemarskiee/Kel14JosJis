@@ -10,6 +10,7 @@ DB = ROOT / "data" / "gold" / "gudang.duckdb"
 DDL = Path(__file__).with_name("silver.sql")
 
 def jalankan(silver):
+    silver = silver.drop(columns=['proyeksi'], errors='ignore') 
     DB.parent.mkdir(parents=True, exist_ok=True)
     DB.unlink(missing_ok=True)
     
