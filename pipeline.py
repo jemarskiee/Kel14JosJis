@@ -22,8 +22,8 @@ def main():
     for nama, langkah in [
         ("ekstraksi", lambda h: ekstraksi.jalankan()),
         ("silver", lambda h: silver.jalankan(h["ekstraksi"])),
-        ("gold", lambda h: gold.jalankan(h["silver"])),  # Tanda # sudah dihapus
-        ("validasi", lambda h: validasi.jalankan(h["silver"], h.get("gold")))
+        ("gold", lambda h: gold.jalankan(h["silver"], h["ekstraksi"])),
+        # ("validasi", lambda h: validasi.jalankan(h["silver"], h["gold"])),
     ]:
         mulai = time.time()
         hasil[nama] = langkah(hasil)
