@@ -30,6 +30,11 @@ def jalankan(mentah):
     print("1. Menstandarisasi dan meratakan data...")
     df = siapkan(mentah)
     baris_awal = len(df)
+    
+    # [PERBAIKAN E1 - PINDAH KE SINI] Ubah kode wilayah '1' menjadi '9999' SEBELUM deduplikasi
+    df["wilayah_kode"] = pd.to_numeric(df["wilayah_kode"], errors="coerce").fillna(0).astype(int)
+    df["wilayah_kode"] = df["wilayah_kode"].replace(1, 9999)
+    
     catat_log(logs, "Ekstraksi Awal", baris_awal, "Data mentah berhasil diratakan.")
     
     # 2. Deduplikasi & Penanganan Snapshot (dari analisis_tahap2.py & kategori_tahap3.py)
@@ -66,24 +71,20 @@ def jalankan(mentah):
     if df_bersih.duplicated(subset=KUNCI).any():
         raise ValueError("GAGAL: Masih ada duplikat pada Kunci Silver setelah pembersihan!")
     
-        # 5. Standarisasi Format Kolom & Tipe Data
+    # 5. Standarisasi Format Kolom & Tipe Data
     print("5. Menyeragamkan format kolom...")
     
     # --- A. PERBAIKAN KOLOM LINEAGE (BERKAS & HASH) ---
-    # Di tahap 2, nama file disimpan di kolom 'berkas'. Kita bersihkan slash-nya.
     if "berkas" in df_bersih.columns:
         df_bersih["berkas"] = df_bersih["berkas"].astype(str).str.lstrip("/")
     else:
         df_bersih["berkas"] = "unknown"
         
-    # Buat kolom 'sumber' (bps, wdi, ilostat, dll)
     if "sumber" not in df_bersih.columns:
         df_bersih["sumber"] = df_bersih["berkas"].str.split("/").str[0]
         
-    # Buat kolom '_berkas_raw' (wajib untuk skema)
     df_bersih["_berkas_raw"] = df_bersih["berkas"]
     
-    # Buat kolom '_sha256_raw' (wajib untuk skema) dengan mengambil dari MANIFEST
     if "_sha256_raw" not in df_bersih.columns:
         try:
             from src.common.manifest import baca
@@ -105,15 +106,12 @@ def jalankan(mentah):
     # --- C. PENYERAGAMAN TIPE DATA ---
     df_bersih["periode"] = df_bersih["periode"].astype(str)
     
-    # Kode wilayah harus berupa bilangan bulat
-    df_bersih["wilayah_kode"] = pd.to_numeric(
-        df_bersih["wilayah_kode"], errors="raise"
-    ).astype("int64")
+    # Kode wilayah harus berupa bilangan bulat (Sudah diubah di atas)
+    df_bersih["wilayah_kode"] = df_bersih["wilayah_kode"].astype("int64")
     
     df_bersih["seri_kode"] = df_bersih["seri_kode"].astype(str)
     df_bersih["rincian"] = df_bersih["rincian"].astype(str)
     
-    # Menyesuaikan jenis periode dengan aturan skema
     df_bersih["jenis_periode"] = (
         df_bersih["jenis_periode"]
         .astype(str)
@@ -154,17 +152,21 @@ def jalankan(mentah):
     )
 
     # --- E. SIMPAN KE PARQUET ---
-    # Buang kolom bantu (TAPI JANGAN BUANG _berkas_raw dan _sha256_raw)
+    
+    # [PERBAIKAN F1] Tambahkan kolom 'proyeksi' sebelum disimpan
+    tahun_periode = pd.to_numeric(df_bersih["periode"].str[:4], errors="coerce")
+    sumber_data = df_bersih["sumber"].astype(str).str.lower()
+    df_bersih["proyeksi"] = (tahun_periode > 2026) & (sumber_data == "ilostat")
+    
+    # Buang kolom bantu
     kolom_dibuang = ["bukan_angka", "snapshot", "berkas", "nasional"] 
     df_silver = df_bersih.drop(columns=[c for c in kolom_dibuang if c in df_bersih.columns])
     
     # Pastikan kolom nilai yang dipakai adalah nilai_num
     if "nilai_num" in df_silver.columns:
-        # Hapus kolom 'nilai' lama (yang mungkin masih teks), lalu pakai 'nilai_num'
         df_silver = df_silver.drop(columns=["nilai"], errors="ignore")
         df_silver = df_silver.rename(columns={"nilai_num": "nilai"})
         
-    # Sapu bersih: pastikan tidak ada nama kolom yang kembar (jaga-jaga)
     df_silver = df_silver.loc[:, ~df_silver.columns.duplicated()]
 
     out_path = Path("data/silver/silver.parquet")
@@ -172,6 +174,8 @@ def jalankan(mentah):
     df_silver.to_parquet(out_path, index=False)
     print(f"Berhasil disimpan ke {out_path} ({len(df_silver)} baris)")
     catat_log(logs, "Simpan Parquet", len(df_silver), f"Data disimpan ke {out_path}")
+
+    return df_silver
 
     # 7. Simpan Log Keputusan
     #log_path = Path("log-keputusan.csv")

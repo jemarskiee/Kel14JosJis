@@ -16,23 +16,23 @@ Baris Silver provinsi yang tidak masuk panel (rincian lain atau berkas lain): 0.
 
 | indikator | satuan | periode | jumlah_periode | sel | terisi | ditandai |
 |---|---|---|---|---|---|---|
-| var1161 | persen_per_tahun | 2011–2025 | 15 | 1079 | 1018 | 74 |
-| var1214 | persen | 2010–2023 | 14 | 1012 | 960 | 64 |
-| var1344 | rupiah_per_tenaga_kerja | 2015–2023 | 9 | 648 | 612 | 68 |
-| var2755 | persen | 2018–2025 | 8 | 584 | 560 | 72 |
+| var1161 | persen_per_tahun | 2011–2025 | 15 | 570 | 509 | 37 |
+| var1214 | persen | 2010–2023 | 14 | 532 | 480 | 32 |
+| var1344 | rupiah_per_tenaga_kerja | 2015–2023 | 9 | 342 | 306 | 34 |
+| var2755 | persen | 2018–2025 | 8 | 304 | 280 | 36 |
 
 ## Status sel
 
 | indikator | belum_berdiri | belum_terbit | kosong | terisi |
 |---|---|---|---|---|
-| var1161 | 45 | 12 | 4 | 1018 |
-| var1214 | 48 | 0 | 4 | 960 |
-| var1344 | 28 | 0 | 8 | 612 |
-| var2755 | 16 | 0 | 8 | 560 |
+| var1161 | 45 | 12 | 4 | 509 |
+| var1214 | 48 | 0 | 4 | 480 |
+| var1344 | 28 | 0 | 8 | 306 |
+| var2755 | 16 | 0 | 8 | 280 |
 
 `terisi` = ada angka; kategori lain berasal dari grid Sprint 1 (`reports/kelengkapan-panel.md`). Sel kosong tidak diisi: tidak ada interpolasi di Gold.
 
 ## Berkas
 
-- `data/gold/panel.parquet`: 3,323 baris (panjang, termasuk sel kosong).
+- `data/gold/panel.parquet`: 1,748 baris (panjang, termasuk sel kosong).
 - `data/gold/panel_lebar.parquet`: 556 baris x 8 kolom (hanya sel terisi; satu kolom per indikator, satuan per indikator di `docs/data-dictionary.md`).
