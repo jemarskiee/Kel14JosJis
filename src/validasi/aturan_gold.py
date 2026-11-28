@@ -11,6 +11,7 @@ import pandas as pd
 
 from src.wilayah import PROVINSI
 
+from .aturan_nasional import aturan_nasional
 from .aturan_silver import AKAR, NIM, RENTANG_LAJU, Hasil, _aturan
 
 PANEL = AKAR / "data" / "gold" / "panel.parquet"
@@ -113,7 +114,7 @@ def _laporan(hasil, n_silver):
 
 def jalankan(silver, gold=None, ketat=False):
     s = _baca(silver)
-    hasil = _aturan(s) + aturan_gold(s)
+    hasil = _aturan(s) + aturan_gold(s) + aturan_nasional()
     for r in hasil:
         print(f"  [{'LOLOS' if r.lolos else 'GAGAL'}] {r.nama}")
         if r.detail:
