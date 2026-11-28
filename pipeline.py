@@ -6,6 +6,7 @@
 Urutan tahap tidak diubah; isi tiap tahap di src/<tahap>/. Tahap 7 (skala, arsip WDI) ditulis
 sebagai skrip terpisah di src/skala/ karena memakai unduhan tambahan.
 """
+"""Satu perintah reproduksi tim: data mentah -> Silver -> Gold -> validasi."""
 import sys
 import time
 
