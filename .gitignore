@@ -7,3 +7,9 @@ data/LISENSI.md
 __pycache__/
 .ipynb_checkpoints/
 .venv/
+
+# Basis data lokal SQL (tugas #24)
+data/sql/*.db
+data/sql/*.sqlite
+data/sql/*.sqlite3
+data/sql/*.duckdb
