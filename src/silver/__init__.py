@@ -7,8 +7,19 @@ from src import konfigurasi as K
 from src.silver.analisis_tahap2 import siapkan, terbaru
 from src.silver.kategori_tahap3 import dedup, MUSTAHIL, KUNCI
 
+# --- PERBAIKAN: Tambahkan fungsi catat_log agar tidak NameError ---
+def catat_log(logs_list, nama_tahap, jumlah_baris, keterangan):
+    logs_list.append({
+        "tahap": nama_tahap,
+        "jumlah_baris": jumlah_baris,
+        "keterangan": keterangan
+    })
+
 def jalankan(mentah):
     print("=== MEMULAI PROSES SILVER (TAHAP 4) ===")
+    
+    # --- PERBAIKAN: Inisialisasi list logs ---
+    logs = []
     
     # 1. Standarisasi
     print("1. Menstandarisasi dan meratakan data...")
@@ -125,12 +136,5 @@ def jalankan(mentah):
     df_silver.to_parquet(out_path, index=False)
     print(f"Berhasil disimpan ke {out_path} ({len(df_silver)} baris)")
     catat_log(logs, "Simpan Parquet", len(df_silver), f"Data disimpan ke {out_path}")
-
-    return df_silver
-
-    # 7. Simpan Log Keputusan
-    #log_path = Path("log-keputusan.csv")
-    #pd.DataFrame(logs).to_csv(log_path, index=False)
-    #print(f"Log keputusan disimpan di {log_path}")
 
     return df_silver
