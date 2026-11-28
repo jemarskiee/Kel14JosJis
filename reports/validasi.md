@@ -1,7 +1,7 @@
 # Validasi Silver dan Gold (otomatis)
 
 Baris Silver: 1,621  
-Aturan: 27, lolos: 24, gagal: 3
+Aturan: 32, lolos: 30, gagal: 2
 
 | Aturan | Hasil | Keterangan |
 |---|---|---|
@@ -31,4 +31,9 @@ Aturan: 27, lolos: 24, gagal: 3
 | N3 nilai tabel nasional dalam rentang wajar per seri_kode | LOLOS | 204 baris diperiksa |
 | N4 baris ILO setelah 2026 ditandai proyeksi, dan hanya ILO | GAGAL | kolom proyeksi tidak ada di tabel nasional; 2 baris ILO setelah 2026 belum ditandai |
 | N5 baris BPS tabel nasional sama dengan Silver (kode 9999: nilai dan berkas asal) | LOLOS | 46 baris BPS cocok dengan Silver |
-| R0 berkas rekonsiliasi ada dengan kolom wajib (periode, nilai utama, nilai pembanding, selisih, kategori) | GAGAL | data/gold/rekonsiliasi.csv belum ada; aturan R1 dan seterusnya belum bisa diperiksa |
+| R0 berkas rekonsiliasi ada dengan kolom wajib (periode, nilai utama, nilai pembanding, selisih, kategori) | LOLOS | 160 baris, 5 pasangan |
+| R1 setiap baris berselisih punya kategori sah (lima kategori panduan 5.7) | LOLOS | 65 baris berselisih berkategori sah |
+| R2 selisih sama dengan nilai utama dikurangi nilai pembanding (toleransi 0,01) | LOLOS | 65 selisih cocok |
+| R3 baris ILO setelah 2026 tidak ikut rekonsiliasi (tanpa selisih) | LOLOS | 2 baris ILO setelah 2026, tanpa selisih |
+| R4 kelima pasangan bagian 3 panduan ada dan berselisih | LOLOS | 5 pasangan lengkap |
+| R5 pembanding WDI untuk var1161 berupa laju (-50 sampai 50), bukan tingkat | LOLOS | 15 baris berselisih diperiksa |
