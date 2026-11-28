@@ -47,3 +47,10 @@ ulang API (bila dilakukan): apa yang berubah sejak snapshot 17–20 Oktober 2026
 | **Suci Aulia ** | 124450034 | Analis Utama (Profil & Pembersihan) | Resolusi konflik log & metrik | Masalah data dan penanganannya, Validasi |
 | **Indah Khairunnisa** | 124450077 | Integrator (Transformasi & panel) | - | - |
 | **Jeremi Marolop Partogi Situmorang** | 124450111 | Koordinator (Validasi & dokumentasi) | - | Ringkasan & Pembagian kerja |
+## Data dan lineage
+
+### Perbandingan SQL dengan JSON mentah
+Menyimpan respons JSON mentah sebagai dokumen mempertahankan struktur asli respons API/sumber (berguna untuk arsip mentah), tetapi memiliki kelemahan untuk analitik dan rekonsiliasi: skema bisa tidak seragam antar-respons, tipe data sering perlu konversi berulang, serta rawan duplikasi entitas jika tidak divalidasi. Tabel relasional SQL dengan PRIMARY KEY dan tipe kolom tegas (TEXT, INTEGER, REAL) mencegah baris duplikat pada kunci komposit (sumber, seri_kode, wilayah_kode, periode, jenis_periode, rincian pada Silver dan gold_panel_provinsi), mempermudah join/agregasi panel wilayah dan periode, serta mendukung pemeriksaan selisih pada tabel rekonsiliasi secara deterministik.
+
+### Alasan pemilihan basis data
+Kami memilih **SQLite** (data/sql/kasus14.db) yang digenerasi otomatis oleh pipeline.py dari skrip DDL sql/schema_kasus14.sql. SQLite tidak memerlukan layanan server terpisah sehingga mudah dijalankan ulang oleh seluruh anggota tim dan pemeriksa pada lingkungan kerja yang berbeda, sambil tetap menegakkan integritas kunci primer dan memudahkan kueri verifikasi jumlah baris serta rekonsiliasi data produktivitas tenaga kerja dan industri.

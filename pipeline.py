@@ -1,4 +1,4 @@
-"""Satu perintah reproduksi tim: data mentah -> Silver -> Gold -> validasi.
+﻿"""Satu perintah reproduksi tim: data mentah -> Silver -> Gold -> validasi.
 
 python unduh_data.py --kasus <N>     # sekali, isi data/raw/
 python pipeline.py
@@ -54,4 +54,13 @@ def main():
 hasil = {}
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except FileNotFoundError as exc:
+        print(f"Catatan: {exc}. Melewati tahap raw/manifest dan memuat dari Parquet/hasil yang tersedia.")
+
+    _ringkasan_sql = muat_ke_sqlite(
+        db_path="data/sql/kasus14.db",
+        ddl_path="sql/schema_kasus14.sql",
+    )
+    print("Verifikasi jumlah baris SQL vs Parquet:", _ringkasan_sql)

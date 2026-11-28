@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 
+=======
+﻿-- DDL Kasus 14: Silver, Panel Gold, Nasional, dan Rekonsiliasi
+>>>>>>> 9e833cf (feat(sql): tambah DDL Silver/Gold/rekonsiliasi dan muat dari pipeline.py)
 
 CREATE TABLE IF NOT EXISTS silver_indikator (
     id_baris INTEGER PRIMARY KEY AUTOINCREMENT,
