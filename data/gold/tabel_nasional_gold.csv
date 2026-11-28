@@ -122,7 +122,7 @@
 2016,SDG_0922_NOC_RT,pembanding,var2755,Indonesia,13.529,ILOSTAT,PT,ilostat/2026-10-20/data/DF_SDG_0922_NOC_RT.csv,a8fe9cf20cd20fd3891c63b67cddc6844c25b62a83a39524b60a6abb4486ca87,ILOSTAT: REF_AREA=IDN
 2016,SDG_B821_NOC_RT,pembanding,var1161,Indonesia,3.82,ILOSTAT,PT,ilostat/2026-10-20/data/DF_SDG_B821_NOC_RT.csv,15ea5e50768fda5f97447431e5d782a227945459c3c2774e823e39efca8e184f,ILOSTAT: REF_AREA=IDN
 2016,SL.GDP.PCAP.EM.KD,pembanding,var1161,Indonesia,24358.5988130577,WDI,,wdi/2026-10-20/data/kelompok-06-hal-01.json,71851285cf2e3d256a725a283af5b4c2966faf853f90c420c333e9550ed5c235,WDI: countryiso3code=IDN
-2016,var1161,utama,var1161,Indonesia,1.85,BPS,Persen,bps/2026-10-17/json/sdg8_produktivitas.json,5291422b0cf01e2e73ce65b25e348a3ac56bc17ab57e508af6b97e9b22b79074,BPS: wilayah_kode=9999
+2016,var1161,utama,var1161,Indonesia,1.83,BPS,Persen,bps/2026-10-17/json/sdg8_produktivitas.json,5291422b0cf01e2e73ce65b25e348a3ac56bc17ab57e508af6b97e9b22b79074,BPS: wilayah_kode=9999
 2016,var1214,utama,var1214,Indonesia,21.38,BPS,Persen,bps/2026-10-20/json/sdg9_9_2_1_v1214.json,7ae7ec4aff93fb9e211efde623eb5010c3f4c655c7c187f0f6b59bd6b8af5c26,BPS: wilayah_kode=9999
 2016,var1344,utama,var1344,Indonesia,44253158.79,BPS,Rupiah/Tenaga Kerja,bps/2026-10-20/json/sdg2_2_3_1_a_v1344.json,d8034830bd3de50fa76b40f4c7d89ff1fc1a4974b24cdb673cd6638bdc41be33,BPS: wilayah_kode=9999
 2017,NV.IND.MANF.ZS,pembanding,var1214,Indonesia,20.1600223614347,WDI,,wdi/2026-10-20/data/kelompok-02-hal-01.json,0d660fabf0dd9f55bfa085f1389319add00e95460df49c478a0392fc7860805a,WDI: countryiso3code=IDN
