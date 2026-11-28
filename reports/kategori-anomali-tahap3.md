@@ -145,3 +145,11 @@ Pada dataset pembanding internasional dari ILOSTAT, teridentifikasi entri yang m
 2. **Verifikasi 2 Kunci Tunggal pada `var1161`:** Lakukan pemeriksaan singkat terhadap 2 baris tambahan yang hanya ada di `sdg8_produktivitas.json` (kemungkinan agregat tingkat nasional/"INDONESIA" atau wilayah administratif tambahan) agar skema penyatuan CSV dan JSON tetap konsisten.
 3. **Kesiapan Tahap Rekonsiliasi:** Dengan `0` konflik *snapshot* dan telah tersaringnya data proyeksi tahun 2027 dari ILOSTAT, dataset seri target BPS telah bersih dan siap dilanjutkan ke tahap rekonsiliasi lintas sumber (BPS vs. WDI/ILOSTAT).
 4. **Rujukan Log Keputusan:** Seluruh aturan dan hasil keputusan deduplikasi, deteksi patahan, kategorisasi anomali, serta penyaringan proyeksi telah dicatat secara eksplisit di dalam `log-keputusan.csv` pada baris **K-024 sampai K-027**.
+
+
+### Keterkaitan Log Keputusan dan Kategori Anomali
+Untuk menjaga transparansi, alur keputusan ini dirujuk secara eksplisit:
+1. **Deduplikasi:** Kunci yang sama persis di dua snapshot diberi status `sama_bukan_duplikat_salah`, sedangkan angka yang berbeda (delta > 1e-9) diberi status `revisi_antar_snapshot` (Rujukan Log: **K-031**). 
+2. **Konflik Nilai:** Konflik antar format (CSV vs JSON di hari yang sama) dicek secara otomatis. Jika ada, baris tersebut akan masuk sebagai `galat_input`. Karena hasil pengecekan adalah 0, maka 0 baris yang terdampak konflik (Rujukan Log: **K-032**).
+3. **Patahan Seri:** Pengecekan lonjakan serentak antarprovinsi menunjukkan 0 tahun yang memenuhi kriteria. Oleh karena itu, tidak ada anomali yang dikategorikan sebagai patahan seri (Rujukan Log: **K-033**).
+4. **Kategori Anomali:** Karena bersih dari konflik dan patahan, seluruh 149 anomali divalidasi sebagai karakteristik asli data (outlier asli) dan hanya ditandai tanpa diubah nilainya (Rujukan Log: **K-030**). Data per baris dapat dilihat pada `reports/profil/anomali_berkategori.csv`.
