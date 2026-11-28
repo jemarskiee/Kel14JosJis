@@ -9,6 +9,8 @@ Kasus, seri yang ditangani, dan satu kalimat temuan utama tentang kualitas datan
 ## Data dan lineage
 Sumber dan format mentah, jumlah berkas, cara `_berkas_raw`/`_sha256_raw` dibentuk, dan hasil tarik
 ulang API (bila dilakukan): apa yang berubah sejak snapshot 17–20 Oktober 2026.
+* **Perbandingan SQL dengan JSON mentah:** JSON mentah di `data/raw/` menyimpan respons/struktur asli sesuai `MANIFEST.csv`, tetapi belum memiliki skema kolom seragam, tipe data tegas, atau jaminan keunikan baris. Tabel SQL (`silver_indikator`, `gold_panel_provinsi`, `gold_tabel_nasional`, dan `gold_rekonsiliasi` di `sql/schema_kasus14.sql` yang dimuat dari `pipeline.py` ke SQLite) menata kolom dengan tipe data dan kunci/keunikan yang jelas sehingga mudah dikueri dan diverifikasi jumlah barisnya.
+* **Alasan pilihan basis data dan kecocokan per lapisan:** SQLite dipilih karena berjalan sebagai berkas basis data lokal tanpa server terpisah dan terintegrasi langsung dengan modul `sqlite3` bawaan Python. Pendekatan SQL ini cocok untuk lapisan **Silver** (kunci unik per entitas/periode/rincian agar pemuatan aman), **Gold** (tabel panel provinsi, tabel nasional, dan rekonsiliasi yang siap dianalisis dan dicek jumlah barisnya), sementara berkas basis data besar tetap tidak di-commit ke repositori.
 
 ## Masalah data dan penanganannya
 Tabel masalah yang ditemukan (missing, outlier, patahan seri, duplikat, format, wilayah) dengan
