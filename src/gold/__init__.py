@@ -19,7 +19,7 @@ SERI_UTAMA = ["var1161", "var1344", "var1214", "var2755"]
 
 
 def _baris(periode, seri, nilai, sumber, satuan, berkas, sha256,
-           jenis_seri, seri_utama):
+           jenis_seri, seri_utama, metode_asal):
     return {
         "periode": str(periode),
         "seri_kode": seri,
@@ -31,6 +31,7 @@ def _baris(periode, seri, nilai, sumber, satuan, berkas, sha256,
         "satuan": satuan,
         "_berkas_raw": berkas,
         "_sha256_raw": sha256,
+        "metode_asal": metode_asal,
     }
 
 
@@ -49,7 +50,8 @@ def jalankan(silver, mentah):
         hasil.append(_baris(
             r["periode"], r["seri_kode"], r["nilai"],
             "BPS", r["satuan"], r["_berkas_raw"],
-            r.get("_sha256_raw", None), "utama", r["seri_kode"]
+            r.get("_sha256_raw", None), "utama", r["seri_kode"],
+            "BPS: wilayah_kode=9999"
         ))
 
     # 2. Mengambil seri pembanding ILOSTAT.
@@ -76,7 +78,8 @@ def jalankan(silver, mentah):
                     r.get("UNIT_MEASURE", None),
                     r["_berkas_raw"],
                     r.get("_sha256_raw", None),
-                    "pembanding", PASANGAN[seri]
+                    "pembanding", PASANGAN[seri],
+                    "ILOSTAT: REF_AREA=IDN"
                 ))
 
     # 3. Mengambil seri pembanding World Development Indicators.
@@ -100,7 +103,8 @@ def jalankan(silver, mentah):
                     "WDI", r.get("unit", None),
                     r["_berkas_raw"],
                     r.get("_sha256_raw", None),
-                    "pembanding", seri_utama
+                    "pembanding", seri_utama,
+                    "WDI: countryiso3code=IDN"
                 ))
 
     # 4. Menyusun dan memeriksa tabel.
@@ -138,8 +142,11 @@ def jalankan(silver, mentah):
 
     jalur = folder / "tabel_nasional_gold.parquet"
     gold.to_parquet(jalur, index=False)
+    jalur_csv = folder / "tabel_nasional_gold.csv"
+    gold.to_csv(jalur_csv, index=False, encoding="utf-8-sig")
 
     print(f"Tabel nasional Gold disimpan: {jalur}")
+    print(f"CSV nasional Gold disimpan: {jalur_csv}")
     print(f"Jumlah baris: {len(gold)}")
     print(f"Jumlah seri: {gold['seri_kode'].nunique()}")
     print(f"Jumlah berkas sumber: {gold['_berkas_raw'].nunique()}")
