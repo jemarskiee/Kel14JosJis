@@ -3,7 +3,10 @@
     "berkas_manifest_cocok": 24,
     "berkas_dibaca": 22,
     "baris_mentah": 5325,
-    "format": 2
+    "format": 2,
+    "seri_silver": 4,
+    "rincian_dienkode": 1,
+    "baris_silver": 1623
   },
   "seed": 0,
   "data_hash": "a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4",
