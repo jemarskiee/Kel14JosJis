@@ -21,6 +21,11 @@ def jalankan(silver):
     
     # Paksa wilayah_kode jadi integer agar cocok dengan skema SQL
     s["wilayah_kode"] = pd.to_numeric(s["wilayah_kode"], errors='coerce').fillna(0).astype(int)
+    
+    # --- TAMBAHAN BARU: Isi nama_wilayah yang kosong agar tidak melanggar NOT NULL ---
+    if "nama_wilayah" in s.columns:
+        s["nama_wilayah"] = s["nama_wilayah"].fillna("Tidak Diketahui")
+    # --------------------------------------------------------------------------------
 
     # Cek apakah kolom rujukan_tahun ada
     if "rujukan_tahun" in s.columns:
@@ -35,8 +40,18 @@ def jalankan(silver):
         con.execute("INSERT INTO seri SELECT * FROM seri_df")
         
         con.register("silver_df", s)
-        kolom = ", ".join(s.columns)
-        con.execute(f"INSERT INTO silver ({kolom}) SELECT {kolom} FROM silver_df")
+        
+        # Ambil daftar kolom yang benar-benar ada di tabel DuckDB
+        cols_db = [c[0] for c in con.execute("DESCRIBE silver").fetchall()]
+        
+        # Filter: hanya masukkan kolom yang ada di dataframe DAN ada di tabel DuckDB
+        kolom_valid = [c for c in s.columns if c in cols_db]
+        
+        if not kolom_valid:
+            raise ValueError("Error: Tidak ada kolom yang cocok antara dataframe dan tabel DuckDB!")
+            
+        kolom_str = ", ".join(kolom_valid)
+        con.execute(f"INSERT INTO silver ({kolom_str}) SELECT {kolom_str} FROM silver_df")
         
         n = con.execute("SELECT count(*) FROM silver").fetchone()[0]
         

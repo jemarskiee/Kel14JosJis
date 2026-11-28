@@ -13,6 +13,13 @@ def jalankan(mentah):
     # 1. Standarisasi
     print("1. Menstandarisasi dan meratakan data...")
     df = siapkan(mentah)
+    baris_awal = len(df)
+    
+    # [PERBAIKAN E1 - PINDAH KE SINI] Ubah kode wilayah '1' menjadi '9999' SEBELUM deduplikasi
+    df["wilayah_kode"] = pd.to_numeric(df["wilayah_kode"], errors="coerce").fillna(0).astype(int)
+    df["wilayah_kode"] = df["wilayah_kode"].replace(1, 9999)
+    
+    catat_log(logs, "Ekstraksi Awal", baris_awal, "Data mentah berhasil diratakan.")
     
     # 2. Deduplikasi
     print("2. Melakukan deduplikasi...")
@@ -38,8 +45,10 @@ def jalankan(mentah):
     if df_bersih.duplicated(subset=KUNCI).any():
         raise ValueError("GAGAL: Masih ada duplikat pada Kunci Silver!")
     
-    # 5. Standarisasi Format Kolom
+    # 5. Standarisasi Format Kolom & Tipe Data
     print("5. Menyeragamkan format kolom...")
+    
+    # --- A. PERBAIKAN KOLOM LINEAGE (BERKAS & HASH) ---
     if "berkas" in df_bersih.columns:
         df_bersih["berkas"] = df_bersih["berkas"].astype(str).str.lstrip("/")
     else:
@@ -47,6 +56,7 @@ def jalankan(mentah):
         
     if "sumber" not in df_bersih.columns:
         df_bersih["sumber"] = df_bersih["berkas"].str.split("/").str[0]
+        
     df_bersih["_berkas_raw"] = df_bersih["berkas"]
     
     if "_sha256_raw" not in df_bersih.columns:
@@ -65,10 +75,20 @@ def jalankan(mentah):
         df_bersih["nama_wilayah"] = np.nan
 
     df_bersih["periode"] = df_bersih["periode"].astype(str)
-    df_bersih["wilayah_kode"] = pd.to_numeric(df_bersih["wilayah_kode"], errors="raise").astype("int64")
+    
+    # Kode wilayah harus berupa bilangan bulat (Sudah diubah di atas)
+    df_bersih["wilayah_kode"] = df_bersih["wilayah_kode"].astype("int64")
+    
     df_bersih["seri_kode"] = df_bersih["seri_kode"].astype(str)
     df_bersih["rincian"] = df_bersih["rincian"].astype(str)
-    df_bersih["jenis_periode"] = df_bersih["jenis_periode"].astype(str).str.strip().str.lower().replace({"tahunan": "tahun"})
+    
+    df_bersih["jenis_periode"] = (
+        df_bersih["jenis_periode"]
+        .astype(str)
+        .str.strip()
+        .str.lower()
+        .replace({"tahunan": "tahun"})
+    )
 
     kamus_satuan = {"var1161": "Persen", "var1214": "Persen", "var1344": "Rupiah/Tenaga Kerja", "var2755": "Persen"}
     df_bersih["satuan"] = df_bersih["satuan"].fillna(df_bersih["seri_kode"].map(kamus_satuan))
@@ -77,12 +97,21 @@ def jalankan(mentah):
     df_bersih["nama_wilayah"] = df_bersih["nama_wilayah"].fillna(df_bersih["wilayah_kode"].map(kamus_wilayah))
     df_bersih["nama_wilayah"] = df_bersih["nama_wilayah"].fillna("Wilayah " + df_bersih["wilayah_kode"].astype(str))
 
+    # --- E. SIMPAN KE PARQUET ---
+    
+    # [PERBAIKAN F1] Tambahkan kolom 'proyeksi' sebelum disimpan
+    tahun_periode = pd.to_numeric(df_bersih["periode"].str[:4], errors="coerce")
+    sumber_data = df_bersih["sumber"].astype(str).str.lower()
+    df_bersih["proyeksi"] = (tahun_periode > 2026) & (sumber_data == "ilostat")
+    
+    # Buang kolom bantu
     kolom_dibuang = ["bukan_angka", "snapshot", "berkas", "nasional"] 
     df_silver = df_bersih.drop(columns=[c for c in kolom_dibuang if c in df_bersih.columns])
     
     if "nilai_num" in df_silver.columns:
         df_silver = df_silver.drop(columns=["nilai"], errors="ignore")
         df_silver = df_silver.rename(columns={"nilai_num": "nilai"})
+        
     df_silver = df_silver.loc[:, ~df_silver.columns.duplicated()]
 
     # --- PERBAIKAN F1: Tambahkan kolom proyeksi ---
@@ -95,5 +124,13 @@ def jalankan(mentah):
     out_path.parent.mkdir(parents=True, exist_ok=True)
     df_silver.to_parquet(out_path, index=False)
     print(f"Berhasil disimpan ke {out_path} ({len(df_silver)} baris)")
+    catat_log(logs, "Simpan Parquet", len(df_silver), f"Data disimpan ke {out_path}")
+
+    return df_silver
+
+    # 7. Simpan Log Keputusan
+    #log_path = Path("log-keputusan.csv")
+    #pd.DataFrame(logs).to_csv(log_path, index=False)
+    #print(f"Log keputusan disimpan di {log_path}")
 
     return df_silver

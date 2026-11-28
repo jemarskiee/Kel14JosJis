@@ -113,7 +113,19 @@ def turunan(panel):
 def jalankan(silver):
     isi = terisi(silver)
     kos = kosong()
+    
+    # PERBAIKAN 1: Pastikan tipe data wilayah_kode sama sebelum concat
+    if not kos.empty:
+        kos["wilayah_kode"] = kos["wilayah_kode"].astype(int)
+    if not isi.empty:
+        isi["wilayah_kode"] = isi["wilayah_kode"].astype(int)
+
     p = pd.concat([isi, kos], ignore_index=True)
+    
+    # PERBAIKAN 2: Buang duplikat. keep="first" memprioritaskan data dari 'isi' (yang ada nilainya).
+    # Grid kosong yang ternyata kuncinya sudah ada di 'isi' akan otomatis dibuang.
+    p = p.drop_duplicates(subset=["indikator", "wilayah_kode", "periode"], keep="first")
+
     if "sumber" not in p.columns:
         p["sumber"] = "bps"
     else:
@@ -142,6 +154,9 @@ def jalankan(silver):
     lebar.columns.name = None
     lebar.to_parquet(GOLD / "panel_lebar.parquet", index=False)
 
+    # PERBAIKAN 3: Hitung ulang jumlah sel kosong yang BENAR-BENAR masuk ke panel
+    kos_valid_len = len(p[p["status_sel"] != "terisi"])
+
     ringkas = (p.assign(t=p["status_sel"] == "terisi")
                .groupby(["indikator", "satuan"])
                .agg(periode=("periode", lambda s: f"{s.min()}–{s.max()}" if s.nunique() > 1 else s.min()),
@@ -151,9 +166,12 @@ def jalankan(silver):
     status = p.pivot_table(index="indikator", columns="status_sel", values="wilayah_kode", aggfunc="size",
                            fill_value=0).reset_index()
     tidak_terpilih = len(silver[silver["wilayah_kode"] != W.INDONESIA]) - len(isi)
+    
+    # Gunakan kos_valid_len untuk catatan
     catat(seri_panel=int(p["indikator"].nunique()), baris_gold=len(p), sel_gold_terisi=len(isi),
-          sel_gold_kosong=len(kos), silver_tidak_terpilih=int(tidak_terpilih),
+          sel_gold_kosong=kos_valid_len, silver_tidak_terpilih=int(tidak_terpilih),
           sel_gold_ditandai=int(p["penanda"].notna().sum()), kolom_panel_lebar=int(lebar.shape[1]))
+          
     tulis("panel-gold.md", "\n\n".join([
         "# Panel Gold provinsi x periode x indikator",
         "Dihasilkan `python pipeline.py` (`src/gold/panel.py`) dari Silver, grid, dan kategori anomali Sprint 1.",
