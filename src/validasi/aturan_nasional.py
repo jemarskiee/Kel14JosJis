@@ -4,8 +4,10 @@ import pandas as pd
 from .aturan_silver import AKAR, RENTANG_LAJU, Hasil
 
 NASIONAL = AKAR / "data" / "gold" / "tabel_nasional_gold.csv"
-REKON = AKAR / "data" / "gold" / "rekonsiliasi.csv"  # nama usulan, belum disepakati
-KOLOM_REKON = ["seri_utama", "pembanding", "periode", "nilai_utama", "nilai_pembanding", "selisih", "kategori"]
+REKON = AKAR / "data" / "gold" / "rekonsiliasi_nasional.csv"
+KOLOM_REKON = ["pasangan", "periode", "nilai_seri_utama", "nilai_pembanding", "selisih", "kategori_penjelasan"]
+KATEGORI_SAH = {"definisi berbeda", "metode berbeda", "vintage berbeda", "cakupan berbeda", "belum terjelaskan"}
+PASANGAN_WAJIB = ["var1161_vs_ILO_SDG_0821_NOC_RT", "var1161_vs_ILO_SDG_B821_NOC_RT", "var1161_vs_WDI_SL_GDP_PCAP_EM_KD", "var1214_vs_WDI_NV_IND_MANF_ZS", "var2755_vs_ILO_SDG_0922_NOC_RT"]
 KUNCI = ["seri_kode", "wilayah", "periode"]
 LAJU = ["var1161", "SDG_0821_NOC_RT", "SDG_B821_NOC_RT"]
 TINGKAT = ["var1344", "SL.GDP.PCAP.EM.KD"]
@@ -59,13 +61,52 @@ def _aturan_n(d):
     return h
 
 
-def _aturan_r0():
-    nama = "R0 berkas rekonsiliasi ada dengan kolom wajib (periode, nilai utama, nilai pembanding, selisih, kategori)"
+def _aturan_rekon():
+    nama0 = "R0 berkas rekonsiliasi ada dengan kolom wajib (periode, nilai utama, nilai pembanding, selisih, kategori)"
     if not REKON.exists():
-        return Hasil(nama, False, "data/gold/rekonsiliasi.csv belum ada; aturan R1 dan seterusnya belum bisa diperiksa")
+        return [Hasil(nama0, False, "data/gold/rekonsiliasi_nasional.csv tidak ditemukan; R1 sampai R5 tidak bisa diperiksa")]
     r = pd.read_csv(REKON)
     hilang = [k for k in KOLOM_REKON if k not in r.columns]
-    return Hasil(nama, not hilang, f"{len(r):,} baris" if not hilang else f"kolom hilang: {hilang}")
+    h = [Hasil(nama0, not hilang, f"{len(r):,} baris, {r['pasangan'].nunique()} pasangan" if not hilang else f"kolom hilang: {hilang}")]
+    if hilang:
+        return h
+    ada = r["selisih"].notna()
+
+    sah = r["kategori_penjelasan"].isin(KATEGORI_SAH)
+    salah = ada & ~sah
+    n = int(salah.sum())
+    h.append(Hasil("R1 setiap baris berselisih punya kategori sah (lima kategori panduan 5.7)", n == 0,
+                   f"{int(ada.sum()):,} baris berselisih berkategori sah" if n == 0
+                   else f"{n:,} pelanggaran; contoh:\n" + r.loc[salah, ["pasangan", "periode", "selisih", "kategori_penjelasan"]].head(5).to_string(index=False)))
+
+    lengkap = r["nilai_seri_utama"].notna() & r["nilai_pembanding"].notna()
+    hitung = r["nilai_seri_utama"] - r["nilai_pembanding"]
+    salah = ada & (~lengkap | (r["selisih"] - hitung).abs().gt(0.01))
+    n = int(salah.sum())
+    h.append(Hasil("R2 selisih sama dengan nilai utama dikurangi nilai pembanding (toleransi 0,01)", n == 0,
+                   f"{int(ada.sum()):,} selisih cocok" if n == 0
+                   else f"{n:,} pelanggaran; contoh:\n" + r.loc[salah, ["pasangan", "periode", "nilai_seri_utama", "nilai_pembanding", "selisih"]].head(5).to_string(index=False)))
+
+    ilo = r["pasangan"].str.contains("ILO") & r["periode"].gt(CUTOFF_PROYEKSI)
+    salah = ilo & ada
+    n = int(salah.sum())
+    h.append(Hasil(f"R3 baris ILO setelah {CUTOFF_PROYEKSI} tidak ikut rekonsiliasi (tanpa selisih)", n == 0,
+                   f"{int(ilo.sum())} baris ILO setelah {CUTOFF_PROYEKSI}, tanpa selisih" if n == 0 else f"{n:,} pelanggaran"))
+
+    ada_pasangan = set(r["pasangan"])
+    tanpa_baris = [p for p in PASANGAN_WAJIB if p not in ada_pasangan]
+    tanpa_selisih = [p for p in PASANGAN_WAJIB if p in ada_pasangan and not r.loc[r["pasangan"].eq(p), "selisih"].notna().any()]
+    ok = (not tanpa_baris) and (not tanpa_selisih)
+    h.append(Hasil("R4 kelima pasangan bagian 3 panduan ada dan berselisih", ok,
+                   f"{len(PASANGAN_WAJIB)} pasangan lengkap" if ok else f"tanpa baris: {tanpa_baris}; tanpa selisih: {tanpa_selisih}"))
+
+    w = r["pasangan"].eq("var1161_vs_WDI_SL_GDP_PCAP_EM_KD") & ada
+    salah = w & ~r["nilai_pembanding"].between(*RENTANG_LAJU)
+    n = int(salah.sum())
+    h.append(Hasil("R5 pembanding WDI untuk var1161 berupa laju (-50 sampai 50), bukan tingkat", n == 0,
+                   f"{int(w.sum())} baris berselisih diperiksa" if n == 0
+                   else f"{n:,} pelanggaran; contoh:\n" + r.loc[salah, ["pasangan", "periode", "nilai_pembanding"]].head(5).to_string(index=False)))
+    return h
 
 
 def _aturan_n5(d):
@@ -96,5 +137,5 @@ def aturan_nasional():
         h.append(_aturan_n5(d))
     else:
         h.append(Hasil("N0 tabel nasional ada di data/gold/tabel_nasional_gold.csv", False, "berkas tidak ditemukan"))
-    h.append(_aturan_r0())
+    h.extend(_aturan_rekon())
     return h
