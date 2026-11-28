@@ -68,10 +68,32 @@ def _aturan_r0():
     return Hasil(nama, not hilang, f"{len(r):,} baris" if not hilang else f"kolom hilang: {hilang}")
 
 
+def _aturan_n5(d):
+    nama = "N5 baris BPS tabel nasional sama dengan Silver (kode 9999: nilai dan berkas asal)"
+    sp = AKAR / "data" / "silver" / "silver.parquet"
+    if not sp.exists():
+        return Hasil(nama, False, "data/silver/silver.parquet tidak ditemukan")
+    s = pd.read_parquet(sp)
+    s = s[pd.to_numeric(s["wilayah_kode"], errors="coerce").eq(9999)][["seri_kode", "periode", "_berkas_raw", "nilai"]].copy()
+    s["periode"] = pd.to_numeric(s["periode"], errors="coerce")
+    b = d[d["sumber"].eq("BPS")].copy()
+    m = b.merge(s, on=["seri_kode", "periode", "_berkas_raw"], how="left", suffixes=("", "_silver"), indicator=True)
+    tanpa = m["_merge"].ne("both")
+    beda = (m["nilai"] - m["nilai_silver"]).abs().gt(1e-9)
+    salah = tanpa | beda
+    n = int(salah.sum())
+    if n == 0:
+        return Hasil(nama, True, f"{len(b):,} baris BPS cocok dengan Silver")
+    kolom = ["seri_kode", "periode", "_berkas_raw", "nilai", "nilai_silver"]
+    return Hasil(nama, False, f"{n:,} pelanggaran; contoh:\n" + m.loc[salah, kolom].head(5).to_string(index=False))
+
+
 def aturan_nasional():
     h = []
     if NASIONAL.exists():
-        h.extend(_aturan_n(pd.read_csv(NASIONAL)))
+        d = pd.read_csv(NASIONAL)
+        h.extend(_aturan_n(d))
+        h.append(_aturan_n5(d))
     else:
         h.append(Hasil("N0 tabel nasional ada di data/gold/tabel_nasional_gold.csv", False, "berkas tidak ditemukan"))
     h.append(_aturan_r0())
