@@ -1,9 +1,10 @@
 {
   "metrik": {
-    "pasangan_rekonsiliasi": 4,
-    "periode_beririsan": 43
+    "pasangan_rekonsiliasi": 65,
+    "periode_beririsan": 43,
+    "selisih_median": 0.242586
   },
   "seed": 0,
-  "data_hash": "a3e02f7dc596e0eb3eb31def465255c7452c62689cab0f05fac7baf1c86859d4",
-  "perangkat": "Windows AMD64 Python 3.13.14"
+  "data_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "perangkat": "Windows AMD64 Python 3.14.3"
 }

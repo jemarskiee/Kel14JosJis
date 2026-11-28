@@ -64,3 +64,6 @@ if __name__ == "__main__":
         ddl_path="sql/schema_kasus14.sql",
     )
     print("Verifikasi jumlah baris SQL vs Parquet:", _ringkasan_sql)
+
+from rekonsiliasi_tahap6 import jalankan_rekonsiliasi_tahap6
+jalankan_rekonsiliasi_tahap6()
